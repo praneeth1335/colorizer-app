@@ -5,19 +5,86 @@ from PIL import Image
 import os
 import requests
 import time
+import io
 
-# Page configuration
+# Page configuration with mobile-optimized settings
 st.set_page_config(
     page_title="Modern AI Colorizer",
     page_icon="🎨",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': None,
+        'Report a bug': None,
+        'About': None
+    }
 )
 
-# Load modern CSS
+# Load modern CSS with mobile fixes
 def load_modern_css():
-    with open('modern_style.css') as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    try:
+        with open('modern_style.css') as f:
+            css_content = f.read()
+        
+        # Add additional mobile-specific CSS overrides
+        mobile_css = """
+        <style>
+        /* Additional mobile sidebar fixes */
+        @media (max-width: 768px) {
+            /* Force sidebar visibility on mobile */
+            .css-1d391kg {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+            
+            /* Streamlit sidebar container */
+            .css-1lcbmhc {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+            
+            /* Sidebar toggle button - hide it */
+            .css-1y4p8pa {
+                display: none !important;
+            }
+            
+            /* Main content area adjustments */
+            .css-18e3th9 {
+                margin-top: 50vh !important;
+            }
+            
+            /* Sidebar width and positioning */
+            .css-1d391kg {
+                width: 100% !important;
+                max-width: 100% !important;
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                z-index: 999 !important;
+                max-height: 50vh !important;
+                overflow-y: auto !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .css-1d391kg {
+                max-height: 40vh !important;
+            }
+            
+            .css-18e3th9 {
+                margin-top: 40vh !important;
+            }
+        }
+        </style>
+        """
+        
+        st.markdown(f'<style>{css_content}</style>', unsafe_allow_html=True)
+        st.markdown(mobile_css, unsafe_allow_html=True)
+        
+    except FileNotFoundError:
+        st.warning("CSS file not found. Using default styling.")
 
 load_modern_css()
 
@@ -110,8 +177,16 @@ def main():
     st.title("🎨 Modern AI Colorizer")
     st.markdown("*Transform your black & white memories into vibrant, colorized masterpieces with cutting-edge AI*")
     
-    # Sidebar with project information
+    # Sidebar with project information - Enhanced for mobile
     with st.sidebar:
+        # Mobile-friendly sidebar header
+        st.markdown("""
+        <div style="text-align: center; margin-bottom: 1rem;">
+            <h3 style="color: var(--primary-600); margin: 0;">📱 Mobile Optimized</h3>
+            <p style="font-size: 0.9rem; margin: 0.5rem 0; color: var(--neutral-600);">Sidebar visible on all devices</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
         st.markdown("""
     <style>
     .developer-credit a {
@@ -143,6 +218,7 @@ def main():
         - **User Friendly**: Simple drag-and-drop interface
         - **Modern Design**: Beautiful, responsive interface
         - **Mobile Optimized**: Works perfectly on all devices
+        - **Always Visible Sidebar**: Information accessible on mobile
         """)
         
         st.markdown("---")
@@ -177,12 +253,14 @@ def main():
         - **AI Model**: Caffe/DNN framework
         - **Styling**: Modern responsive design
         - **Deployment**: Cloud-ready architecture
+        - **Mobile Support**: Enhanced mobile experience
         
         ### 📈 Performance Features:
         - **Responsive Design**: Adapts to all screen sizes
         - **Fast Loading**: Optimized for quick startup
         - **Memory Efficient**: Smart caching system
         - **Cross-Platform**: Works on desktop and mobile
+        - **Mobile Sidebar**: Always accessible information
         """)
         
         st.markdown("---")
@@ -200,6 +278,16 @@ def main():
         - Extract luminance (L) channel
         - Predict a,b color channels using CNN
         - Combine channels for final RGB output
+        """)
+        
+        # Mobile-specific instructions
+        st.markdown("---")
+        st.markdown("## 📱 Mobile Usage Tips")
+        st.markdown("""
+        - **Sidebar**: Always visible on mobile devices
+        - **Touch Friendly**: Optimized for touch interaction
+        - **Scroll**: Sidebar scrolls independently
+        - **Performance**: Same quality on all devices
         """)
     
     # Main content area
@@ -244,7 +332,6 @@ def main():
                 <p><strong>Dimensions:</strong> {image.size[0]} × {image.size[1]} pixels</p>
                 <p><strong>Mode:</strong> {image.mode}</p>
                 <p><strong>Format:</strong> {image.format}</p>
-                <p><strong>Aspect Ratio:</strong> {image.size[0]/image.size[1]:.2f}</p>
             </div>
             """, unsafe_allow_html=True)
         
@@ -254,19 +341,6 @@ def main():
             # Processing with progress
             with st.spinner("🎨 AI is colorizing your image..."):
                 progress_bar = st.progress(0)
-                
-                # # Simulate processing steps with realistic timing
-                # progress_bar.progress(25)
-                # st.text("🔍 Analyzing image structure...")
-                # time.sleep(0.5)
-                
-                # progress_bar.progress(50)
-                # st.text("🧠 AI processing colors...")
-                # time.sleep(0.5)
-                
-                # progress_bar.progress(75)
-                # st.text("✨ Enhancing results...")
-                # time.sleep(0.3)
                 
                 try:
                     # Actual colorization
@@ -281,6 +355,20 @@ def main():
                     # Display result
                     st.image(colorized, caption="AI-colorized version", use_column_width=True)
                     
+                    # Convert colorized image to bytes for download
+                    colorized_image_pil = Image.fromarray(colorized)
+                    buf = io.BytesIO()
+                    colorized_image_pil.save(buf, format="PNG")
+                    byte_im = buf.getvalue()
+
+                    st.download_button(
+                        label="Download Colorized Image",
+                        data=byte_im,
+                        file_name=f"colorized_{uploaded_file.name.split('.')[0]}.png",
+                        mime="image/png",
+                        help="Click to download the colorized image"
+                    )
+
                     # Success message
                     st.success("✨ Colorization completed successfully!")
                     
@@ -292,12 +380,9 @@ def main():
                         <p><strong>AI Confidence:</strong> 87%</p>
                         <p><strong>Enhancement:</strong> Applied</p>
                         <p><strong>Quality:</strong> High Definition</p>
+                        <p><strong>Mobile Optimized:</strong> ✅ Yes</p>
                     </div>
                     """, unsafe_allow_html=True)
-                    
-                    # Download functionality would go here
-                    # Note: Streamlit doesn't have built-in download for PIL images
-                    # This would require additional implementation
                     
                 except Exception as e:
                     st.error(f"❌ Processing failed: {str(e)}")
@@ -389,6 +474,7 @@ def main():
                 <li>Touch-friendly interface</li>
                 <li>Adaptive layouts</li>
                 <li>Cross-platform support</li>
+                <li>Always visible sidebar</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
@@ -408,6 +494,7 @@ def main():
             <p><strong>Max Resolution:</strong> 4096x4096 pixels</p>
             <p><strong>Processing Time:</strong> 2-5 seconds</p>
             <p><strong>Memory Usage:</strong> ~500MB</p>
+            <p><strong>Mobile Support:</strong> ✅ Full compatibility</p>
         </div>
         """, unsafe_allow_html=True)
     
@@ -420,6 +507,7 @@ def main():
             <p><strong>Color Space:</strong> LAB color model</p>
             <p><strong>Framework:</strong> OpenCV DNN</p>
             <p><strong>Model Size:</strong> ~125MB</p>
+            <p><strong>Mobile Optimized:</strong> ✅ Yes</p>
         </div>
         """, unsafe_allow_html=True)
     
@@ -427,10 +515,10 @@ def main():
     st.markdown("""
     <div class="developer-credit" style="margin-top: 3rem;">
         <h4 class="gradient-text">🎨 Modern AI Colorizer</h4>
-        <p><strong>Version:</strong> 2.0 Beta | <strong>Developer:</strong> Bodapati Sai Praneeth</p>
+        <p><strong>Version:</strong> 2.0 Beta (Mobile Enhanced) | <strong>Developer:</strong> Bodapati Sai Praneeth</p>
         <p><strong>Last Updated:</strong> January 2025 | <strong>License:</strong> Sastra University</p>
         <p>Built with ❤️ using Streamlit, OpenCV, and Deep Learning</p>
-        <p><em>Transforming memories, one image at a time</em></p>
+        <p><em>Transforming memories, one image at a time - Now on mobile!</em></p>
     </div>
     """, unsafe_allow_html=True)
 

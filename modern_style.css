@@ -600,11 +600,13 @@ hr {
   border-radius: var(--radius-full);
 }
 
-/* Sidebar Styling */
+/* Enhanced Sidebar Styling with Mobile Support */
 .stSidebar {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(20px);
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: var(--shadow-xl) !important;
+  z-index: 1000 !important;
 }
 
 .stSidebar .stMarkdown {
@@ -616,6 +618,127 @@ hr {
 .stSidebar h3,
 .stSidebar h4 {
   color: var(--neutral-800);
+}
+
+/* Force sidebar visibility on all screen sizes */
+.stSidebar > div {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Sidebar content container */
+.stSidebar .css-1d391kg {
+  padding: var(--space-4) !important;
+}
+
+/* Mobile-specific sidebar fixes */
+@media (max-width: 768px) {
+  /* Force sidebar to be visible on mobile */
+  .stSidebar {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: 50vh !important;
+    overflow-y: auto !important;
+    z-index: 1000 !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(20px) !important;
+    border-bottom: 2px solid var(--primary-300) !important;
+    border-right: none !important;
+    transform: translateX(0) !important;
+  }
+
+  /* Sidebar content adjustments for mobile */
+  .stSidebar > div {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    padding: var(--space-4) !important;
+  }
+
+  /* Adjust main content to account for fixed sidebar */
+  .main .block-container {
+    margin-top: 50vh !important;
+    padding-top: var(--space-8) !important;
+  }
+
+  /* Make sidebar scrollable on mobile */
+  .stSidebar .css-1d391kg {
+    max-height: 45vh !important;
+    overflow-y: auto !important;
+    padding: var(--space-3) !important;
+  }
+
+  /* Sidebar text adjustments for mobile */
+  .stSidebar h4 {
+    font-size: 1.1rem !important;
+    margin-bottom: var(--space-2) !important;
+  }
+
+  .stSidebar p {
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: var(--space-2) !important;
+  }
+
+  .stSidebar ul {
+    font-size: 0.85rem !important;
+    padding-left: var(--space-4) !important;
+  }
+
+  .stSidebar li {
+    margin-bottom: var(--space-1) !important;
+  }
+}
+
+/* Tablet-specific adjustments */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .stSidebar {
+    width: 280px !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  .main .block-container {
+    margin-left: 280px !important;
+    max-width: calc(100% - 280px) !important;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .stSidebar {
+    max-height: 40vh !important;
+  }
+
+  .main .block-container {
+    margin-top: 40vh !important;
+    padding: var(--space-3) !important;
+  }
+
+  .stSidebar .css-1d391kg {
+    max-height: 35vh !important;
+    padding: var(--space-2) !important;
+  }
+
+  .stSidebar h4 {
+    font-size: 1rem !important;
+  }
+
+  .stSidebar p {
+    font-size: 0.85rem !important;
+  }
+
+  .stSidebar ul {
+    font-size: 0.8rem !important;
+  }
 }
 
 /* Animations */
@@ -674,14 +797,6 @@ hr {
 }
 
 @media (max-width: 768px) {
-  .main .block-container {
-    padding: var(--space-4);
-  }
-
-  h1 {
-    font-size: 2.5rem;
-  }
-
   .stColumns {
     flex-direction: column;
     gap: var(--space-4);
@@ -702,10 +817,6 @@ hr {
 }
 
 @media (max-width: 480px) {
-  .main .block-container {
-    padding: var(--space-3);
-  }
-
   .stFileUploader {
     padding: var(--space-6);
   }
@@ -888,4 +999,18 @@ hr {
 
 .hover-lift:hover {
   transform: translateY(-4px);
+}
+
+/* Additional mobile sidebar toggle button styling */
+.stSidebar .css-1lcbmhc {
+  display: none !important;
+}
+
+/* Ensure sidebar content is always visible */
+.stSidebar .css-1d391kg,
+.stSidebar .css-1lcbmhc,
+.stSidebar .css-1y4p8pa {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
