@@ -26,45 +26,101 @@ def load_modern_css():
         with open('modern_style.css') as f:
             css_content = f.read()
         
-        # Add additional mobile-specific CSS overrides
-        mobile_css = """
-        <style>
-        /* Additional mobile sidebar fixes */
-        @media (max-width: 768px) {
-            /* Force sidebar visibility on mobile */
-            .css-1d391kg {
-                display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-            }
-            
-            /* Streamlit sidebar container */
-            .css-1lcbmhc {
-                display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-            }
-            
-            /* Sidebar toggle button - hide it */
-            .css-1y4p8pa {
-                display: none !important;
-            }
-            
-            /* Main content area adjustments */
-            .css-18e3th9 {
-                margin-top: 0 !important;
-            }
-        }
-        </style>
-        """
-        
         st.markdown(f'<style>{css_content}</style>', unsafe_allow_html=True)
-        st.markdown(mobile_css, unsafe_allow_html=True)
         
     except FileNotFoundError:
         st.warning("CSS file not found. Using default styling.")
 
 load_modern_css()
+
+# Add JavaScript for mobile sidebar functionality
+def add_mobile_sidebar_js():
+    st.markdown("""
+    <script>
+    function initMobileSidebar() {
+        // Remove any existing elements first
+        const existingToggle = document.querySelector('.mobile-sidebar-toggle');
+        const existingOverlay = document.querySelector('.sidebar-overlay');
+        if (existingToggle) existingToggle.remove();
+        if (existingOverlay) existingOverlay.remove();
+        
+        // Create mobile toggle button
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = 'mobile-sidebar-toggle';
+        toggleBtn.innerHTML = '☰';
+        toggleBtn.setAttribute('aria-label', 'Toggle Sidebar');
+        
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'sidebar-overlay';
+        
+        // Add elements to body
+        document.body.appendChild(toggleBtn);
+        document.body.appendChild(overlay);
+        
+        // Get sidebar element
+        const sidebar = document.querySelector('.stSidebar');
+        
+        if (sidebar) {
+            // Toggle function
+            function toggleSidebar() {
+                const isOpen = sidebar.classList.contains('mobile-sidebar-open');
+                
+                if (isOpen) {
+                    sidebar.classList.remove('mobile-sidebar-open');
+                    overlay.classList.remove('active');
+                    toggleBtn.innerHTML = '☰';
+                    document.body.style.overflow = '';
+                } else {
+                    sidebar.classList.add('mobile-sidebar-open');
+                    overlay.classList.add('active');
+                    toggleBtn.innerHTML = '✕';
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+            
+            // Event listeners
+            toggleBtn.addEventListener('click', toggleSidebar);
+            overlay.addEventListener('click', toggleSidebar);
+            
+            // Close sidebar on escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && sidebar.classList.contains('mobile-sidebar-open')) {
+                    toggleSidebar();
+                }
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    sidebar.classList.remove('mobile-sidebar-open');
+                    overlay.classList.remove('active');
+                    toggleBtn.innerHTML = '☰';
+                    document.body.style.overflow = '';
+                }
+            });
+            
+            // Ensure sidebar content is visible
+            const sidebarContent = sidebar.querySelector('.css-1d391kg');
+            if (sidebarContent) {
+                sidebarContent.style.display = 'block';
+                sidebarContent.style.visibility = 'visible';
+                sidebarContent.style.opacity = '1';
+            }
+        }
+    }
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMobileSidebar);
+    } else {
+        initMobileSidebar();
+    }
+    
+    // Re-initialize after Streamlit updates
+    setTimeout(initMobileSidebar, 1000);
+    </script>
+    """, unsafe_allow_html=True)
 
 # Hugging Face model URLs
 URLS = {
@@ -145,43 +201,8 @@ def colorizer(img):
     return colorized
 
 def main():
-    # Add JavaScript for sidebar toggle functionality
-    st.markdown("""
-    <script>
-    // Function to toggle sidebar
-    function toggleSidebar() {
-        const sidebar = parent.document.querySelector(".stSidebar");
-        const mainContent = parent.document.querySelector(".main");
-        
-        if (sidebar.style.transform === "translateY(-100%)" || !sidebar.style.transform) {
-            sidebar.style.transform = "translateY(0)";
-            mainContent.style.marginTop = "60vh";
-        } else {
-            sidebar.style.transform = "translateY(-100%)";
-            mainContent.style.marginTop = "0";
-        }
-    }
-    
-    // Close sidebar when clicking outside on mobile
-    document.addEventListener('click', function(event) {
-        if (window.innerWidth <= 768) {
-            const sidebar = parent.document.querySelector(".stSidebar");
-            const mainContent = parent.document.querySelector(".main");
-            const closeBtn = parent.document.querySelector(".sidebar-close-btn");
-            
-            if (!sidebar.contains(event.target) && event.target !== closeBtn) {
-                sidebar.style.transform = "translateY(-100%)";
-                mainContent.style.marginTop = "0";
-            }
-        }
-    });
-    </script>
-    """, unsafe_allow_html=True)
-
-    # Add mobile toggle button
-    st.markdown("""
-    <button class="sidebar-toggle-btn" onclick="toggleSidebar()">☰</button>
-    """, unsafe_allow_html=True)
+    # Initialize mobile sidebar functionality
+    add_mobile_sidebar_js()
 
     # Header
     st.markdown("""
@@ -195,12 +216,10 @@ def main():
     
     # Sidebar with project information - Enhanced for mobile
     with st.sidebar:
-        # Add close button for mobile
         st.markdown("""
-        <button class="sidebar-close-btn" onclick="toggleSidebar()">×</button>
         <div style="text-align: center; margin-bottom: 1rem;">
             <h3 style="color: var(--primary-600); margin: 0;">📱 Mobile Optimized</h3>
-            <p style="font-size: 0.9rem; margin: 0.5rem 0; color: var(--neutral-600);">Tap × to close sidebar</p>
+            <p style="font-size: 0.9rem; margin: 0.5rem 0; color: var(--neutral-600);">Tap ☰ to open/close sidebar</p>
         </div>
         """, unsafe_allow_html=True)
         
@@ -235,7 +254,7 @@ def main():
         - **User Friendly**: Simple drag-and-drop interface
         - **Modern Design**: Beautiful, responsive interface
         - **Mobile Optimized**: Works perfectly on all devices
-        - **Always Visible Sidebar**: Information accessible on mobile
+        - **Touch-Friendly Sidebar**: Easy mobile navigation
         """)
         
         st.markdown("---")
@@ -277,7 +296,7 @@ def main():
         - **Fast Loading**: Optimized for quick startup
         - **Memory Efficient**: Smart caching system
         - **Cross-Platform**: Works on desktop and mobile
-        - **Mobile Sidebar**: Always accessible information
+        - **Mobile Sidebar**: Touch-friendly navigation
         """)
         
         st.markdown("---")
@@ -301,10 +320,11 @@ def main():
         st.markdown("---")
         st.markdown("## 📱 Mobile Usage Tips")
         st.markdown("""
-        - **Sidebar**: Tap ☰ button at bottom right to open
-        - **Close Sidebar**: Tap × button at top right
+        - **Open Sidebar**: Tap ☰ button at bottom right
+        - **Close Sidebar**: Tap ✕ or tap outside sidebar
         - **Touch Friendly**: Optimized for touch interaction
         - **Performance**: Same quality on all devices
+        - **Responsive**: Adapts to your screen size
         """)
     
     # Main content area
@@ -491,7 +511,7 @@ def main():
                 <li>Touch-friendly interface</li>
                 <li>Adaptive layouts</li>
                 <li>Cross-platform support</li>
-                <li>Always visible sidebar</li>
+                <li>Smart sidebar toggle</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
@@ -535,7 +555,7 @@ def main():
         <p><strong>Version:</strong> 2.0 Beta (Mobile Enhanced) | <strong>Developer:</strong> Bodapati Sai Praneeth</p>
         <p><strong>Last Updated:</strong> January 2025 | <strong>License:</strong> Sastra University</p>
         <p>Built with ❤️ using Streamlit, OpenCV, and Deep Learning</p>
-        <p><em>Transforming memories, one image at a time - Now on mobile!</em></p>
+        <p><em>Transforming memories, one image at a time - Now fully mobile!</em></p>
     </div>
     """, unsafe_allow_html=True)
 
