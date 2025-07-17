@@ -52,29 +52,7 @@ def load_modern_css():
             
             /* Main content area adjustments */
             .css-18e3th9 {
-                margin-top: 50vh !important;
-            }
-            
-            /* Sidebar width and positioning */
-            .css-1d391kg {
-                width: 100% !important;
-                max-width: 100% !important;
-                position: fixed !important;
-                top: 0 !important;
-                left: 0 !important;
-                z-index: 999 !important;
-                max-height: 50vh !important;
-                overflow-y: auto !important;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .css-1d391kg {
-                max-height: 40vh !important;
-            }
-            
-            .css-18e3th9 {
-                margin-top: 40vh !important;
+                margin-top: 0 !important;
             }
         }
         </style>
@@ -167,6 +145,44 @@ def colorizer(img):
     return colorized
 
 def main():
+    # Add JavaScript for sidebar toggle functionality
+    st.markdown("""
+    <script>
+    // Function to toggle sidebar
+    function toggleSidebar() {
+        const sidebar = parent.document.querySelector(".stSidebar");
+        const mainContent = parent.document.querySelector(".main");
+        
+        if (sidebar.style.transform === "translateY(-100%)" || !sidebar.style.transform) {
+            sidebar.style.transform = "translateY(0)";
+            mainContent.style.marginTop = "60vh";
+        } else {
+            sidebar.style.transform = "translateY(-100%)";
+            mainContent.style.marginTop = "0";
+        }
+    }
+    
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', function(event) {
+        if (window.innerWidth <= 768) {
+            const sidebar = parent.document.querySelector(".stSidebar");
+            const mainContent = parent.document.querySelector(".main");
+            const closeBtn = parent.document.querySelector(".sidebar-close-btn");
+            
+            if (!sidebar.contains(event.target) && event.target !== closeBtn) {
+                sidebar.style.transform = "translateY(-100%)";
+                mainContent.style.marginTop = "0";
+            }
+        }
+    });
+    </script>
+    """, unsafe_allow_html=True)
+
+    # Add mobile toggle button
+    st.markdown("""
+    <button class="sidebar-toggle-btn" onclick="toggleSidebar()">☰</button>
+    """, unsafe_allow_html=True)
+
     # Header
     st.markdown("""
     <div style="text-align: center; margin-bottom: 2rem;">
@@ -179,11 +195,12 @@ def main():
     
     # Sidebar with project information - Enhanced for mobile
     with st.sidebar:
-        # Mobile-friendly sidebar header
+        # Add close button for mobile
         st.markdown("""
+        <button class="sidebar-close-btn" onclick="toggleSidebar()">×</button>
         <div style="text-align: center; margin-bottom: 1rem;">
             <h3 style="color: var(--primary-600); margin: 0;">📱 Mobile Optimized</h3>
-            <p style="font-size: 0.9rem; margin: 0.5rem 0; color: var(--neutral-600);">Sidebar visible on all devices</p>
+            <p style="font-size: 0.9rem; margin: 0.5rem 0; color: var(--neutral-600);">Tap × to close sidebar</p>
         </div>
         """, unsafe_allow_html=True)
         
@@ -284,9 +301,9 @@ def main():
         st.markdown("---")
         st.markdown("## 📱 Mobile Usage Tips")
         st.markdown("""
-        - **Sidebar**: Always visible on mobile devices
+        - **Sidebar**: Tap ☰ button at bottom right to open
+        - **Close Sidebar**: Tap × button at top right
         - **Touch Friendly**: Optimized for touch interaction
-        - **Scroll**: Sidebar scrolls independently
         - **Performance**: Same quality on all devices
         """)
     
