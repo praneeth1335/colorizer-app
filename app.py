@@ -421,7 +421,7 @@ def main():
     <div class="developer-credit" style="margin-top: 3rem;">
         <h4 class="gradient-text">🎨 Modern AI Colorizer</h4>
         <p><strong>Version:</strong> 2.0 Beta | <strong>Developer:</strong> Bodapati Sai Praneeth</p>
-        <p><strong>Last Updated:</strong> January 2025 | <strong>License:</strong> MIT</p>
+        <p><strong>Last Updated:</strong> January 2025 | <strong>License:</strong> Sastra University</p>
         <p>Built with ❤️ using Streamlit, OpenCV, and Deep Learning</p>
         <p><em>Transforming memories, one image at a time</em></p>
     </div>
