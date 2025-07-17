@@ -113,14 +113,21 @@ def main():
     # Sidebar with project information
     with st.sidebar:
         st.markdown("""
-        <div class="developer-credit">
-            <h4>👨‍💻 Developer</h4>
-            <p><strong>Bodapati Sai Praneeth</strong></p>
-            <p>AI/ML Engineer</p>
-            <p>📧 Contact: praneeth@example.com</p>
-            <p>🌐 GitHub: @bodapati-sai-praneeth</p>
-        </div>
-        """, unsafe_allow_html=True)
+    <style>
+    .developer-credit a {
+        color: inherit;        /* inherits parent text color */
+        text-decoration: none; /* removes underline */
+    }
+    </style>
+    <div class="developer-credit">
+        <h4>👨‍💻 Developer</h4>
+        <p><strong>Bodapati Sai Praneeth</strong></p>
+        <p>AI/ML Engineer</p>
+        <p>📧 Contact: bspraneeth05@gmail.com</p>
+        <p>🌐 GitHub: <a href="https://github.com/praneeth1335" target="_blank">https://github.com/praneeth1335</a></p>
+    </div>
+    """, unsafe_allow_html=True)
+
         
         st.markdown("---")
         
@@ -248,18 +255,18 @@ def main():
             with st.spinner("🎨 AI is colorizing your image..."):
                 progress_bar = st.progress(0)
                 
-                # Simulate processing steps with realistic timing
-                progress_bar.progress(25)
-                st.text("🔍 Analyzing image structure...")
-                time.sleep(0.5)
+                # # Simulate processing steps with realistic timing
+                # progress_bar.progress(25)
+                # st.text("🔍 Analyzing image structure...")
+                # time.sleep(0.5)
                 
-                progress_bar.progress(50)
-                st.text("🧠 AI processing colors...")
-                time.sleep(0.5)
+                # progress_bar.progress(50)
+                # st.text("🧠 AI processing colors...")
+                # time.sleep(0.5)
                 
-                progress_bar.progress(75)
-                st.text("✨ Enhancing results...")
-                time.sleep(0.3)
+                # progress_bar.progress(75)
+                # st.text("✨ Enhancing results...")
+                # time.sleep(0.3)
                 
                 try:
                     # Actual colorization
