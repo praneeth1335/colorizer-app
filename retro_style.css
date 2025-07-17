@@ -1,0 +1,512 @@
+/* Import Classic Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+Pro:wght@300;400;600;700&family=Courier+Prime:wght@400;700&display=swap");
+
+/* Retro Color Palette */
+:root {
+  --cream: #f7f3e9;
+  --warm-white: #fefcf7;
+  --vintage-brown: #8b4513;
+  --deep-brown: #5d2e0a;
+  --gold: #d4af37;
+  --rust: #b7410e;
+  --sage: #9caf88;
+  --dusty-blue: #6b8cae;
+  --charcoal: #2c2c2c;
+  --soft-gray: #6c6c6c;
+  --light-gray: #e8e8e8;
+
+  /* Shadows */
+  --soft-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --medium-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --vintage-shadow: 0 6px 20px rgba(139, 69, 19, 0.2);
+}
+
+/* Global Styles */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Source Sans Pro", sans-serif;
+  background: linear-gradient(135deg, var(--cream) 0%, var(--warm-white) 100%);
+  color: var(--charcoal);
+  line-height: 1.6;
+}
+
+/* Vintage Paper Texture */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(212, 175, 55, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(156, 175, 136, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(107, 140, 174, 0.05) 0%,
+      transparent 50%
+    );
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Hide Streamlit Elements */
+#MainMenu {
+  visibility: hidden;
+}
+footer {
+  visibility: hidden;
+}
+header {
+  visibility: hidden;
+}
+.stDeployButton {
+  display: none;
+}
+
+/* Main Container */
+.stApp {
+  background: transparent;
+}
+
+.main .block-container {
+  max-width: 1200px;
+  padding: 2rem;
+  margin: 0 auto;
+}
+
+/* Vintage Header */
+h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 3.5rem;
+  font-weight: 900;
+  text-align: center;
+  color: var(--vintage-brown);
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.3);
+  position: relative;
+}
+
+h1::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--rust), var(--gold));
+  border-radius: 2px;
+}
+
+/* Subtitle */
+.stApp > div > div > div > div > div:nth-child(2) p {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--soft-gray);
+  font-style: italic;
+  margin-bottom: 3rem;
+  font-weight: 300;
+}
+
+/* Vintage Card Styling */
+.vintage-card {
+  background: var(--warm-white);
+  border: 2px solid var(--light-gray);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: var(--vintage-shadow);
+  position: relative;
+}
+
+.vintage-card::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+/* File Uploader */
+.stFileUploader {
+  background: var(--warm-white);
+  border: 3px dashed var(--dusty-blue);
+  border-radius: 15px;
+  padding: 3rem;
+  margin: 2rem 0;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: var(--soft-shadow);
+}
+
+.stFileUploader::before {
+  content: "📸";
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  opacity: 0.7;
+}
+
+.stFileUploader:hover {
+  border-color: var(--vintage-brown);
+  background: var(--cream);
+  transform: translateY(-2px);
+  box-shadow: var(--medium-shadow);
+}
+
+.stFileUploader > div {
+  border: none !important;
+  background: transparent !important;
+}
+
+.stFileUploader label {
+  color: var(--vintage-brown) !important;
+  font-family: "Playfair Display", serif !important;
+  font-weight: 700 !important;
+  font-size: 1.3rem !important;
+  margin-top: 1rem !important;
+}
+
+.stFileUploader small {
+  color: var(--soft-gray) !important;
+  font-size: 0.9rem !important;
+}
+
+/* Columns */
+.stColumns {
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.stColumn {
+  background: var(--warm-white);
+  border: 2px solid var(--light-gray);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--soft-shadow);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.stColumn::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 1px solid var(--sage);
+  border-radius: 8px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.stColumn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--medium-shadow);
+  border-color: var(--vintage-brown);
+}
+
+/* Images */
+.stImage {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--soft-shadow);
+  transition: all 0.3s ease;
+  border: 3px solid var(--warm-white);
+}
+
+.stImage:hover {
+  transform: scale(1.02);
+  box-shadow: var(--medium-shadow);
+}
+
+.stImage img {
+  transition: all 0.3s ease;
+}
+
+/* Image Captions */
+.stImage + div {
+  text-align: center;
+  margin-top: 1rem;
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  color: var(--vintage-brown);
+  font-size: 1.1rem;
+}
+
+/* Processing Text */
+.stText {
+  text-align: center;
+  color: var(--rust);
+  font-family: "Courier Prime", monospace;
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin: 2rem 0;
+  padding: 1rem;
+  background: var(--cream);
+  border-radius: 8px;
+  border-left: 4px solid var(--gold);
+}
+
+/* Buttons */
+.stButton button {
+  background: linear-gradient(135deg, var(--vintage-brown), var(--deep-brown));
+  color: var(--warm-white);
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 2rem;
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--soft-shadow);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stButton button:hover {
+  background: linear-gradient(135deg, var(--deep-brown), var(--vintage-brown));
+  transform: translateY(-2px);
+  box-shadow: var(--medium-shadow);
+}
+
+/* Progress Bar */
+.stProgress > div > div {
+  background: linear-gradient(90deg, var(--gold), var(--rust));
+  border-radius: 4px;
+  height: 8px;
+}
+
+/* Success/Error Messages */
+.stSuccess {
+  background: linear-gradient(
+    135deg,
+    rgba(156, 175, 136, 0.2),
+    rgba(156, 175, 136, 0.1)
+  );
+  border: 1px solid var(--sage);
+  border-radius: 8px;
+  color: var(--deep-brown);
+  font-weight: 600;
+}
+
+.stError {
+  background: linear-gradient(
+    135deg,
+    rgba(183, 65, 14, 0.2),
+    rgba(183, 65, 14, 0.1)
+  );
+  border: 1px solid var(--rust);
+  border-radius: 8px;
+  color: var(--deep-brown);
+  font-weight: 600;
+}
+
+.stInfo {
+  background: linear-gradient(
+    135deg,
+    rgba(107, 140, 174, 0.2),
+    rgba(107, 140, 174, 0.1)
+  );
+  border: 1px solid var(--dusty-blue);
+  border-radius: 8px;
+  color: var(--deep-brown);
+  font-weight: 600;
+}
+
+/* Section Headers */
+h2,
+h3 {
+  font-family: "Playfair Display", serif;
+  color: var(--vintage-brown);
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  position: relative;
+}
+
+h2::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 1px;
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.8rem;
+  color: var(--deep-brown);
+}
+
+/* Text Styling */
+p {
+  color: var(--charcoal);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+/* Lists */
+ul,
+ol {
+  color: var(--charcoal);
+  padding-left: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+/* Code Blocks */
+code {
+  background: var(--cream);
+  color: var(--deep-brown);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: "Courier Prime", monospace;
+  font-size: 0.9rem;
+}
+
+/* Dividers */
+hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 2rem 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main .block-container {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  .stColumns {
+    flex-direction: column;
+  }
+
+  .stFileUploader {
+    padding: 2rem;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cream);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--vintage-brown), var(--deep-brown));
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--deep-brown), var(--vintage-brown));
+}
+
+/* Focus States */
+*:focus {
+  outline: 2px solid var(--dusty-blue);
+  outline-offset: 2px;
+}
+
+/* Vintage Badge */
+.vintage-badge {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--deep-brown);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: var(--soft-shadow);
+}
+
+/* Developer Credit */
+.developer-credit {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 2rem;
+  background: var(--warm-white);
+  border: 2px solid var(--light-gray);
+  border-radius: 12px;
+  box-shadow: var(--soft-shadow);
+}
+
+.developer-credit h4 {
+  font-family: "Playfair Display", serif;
+  color: var(--vintage-brown);
+  margin-bottom: 1rem;
+}
+
+.developer-credit p {
+  color: var(--soft-gray);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Model Info Cards */
+.model-info {
+  background: var(--cream);
+  border-left: 4px solid var(--dusty-blue);
+  padding: 1.5rem;
+  margin: 1rem 0;
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--soft-shadow);
+}
+
+.model-info h4 {
+  color: var(--vintage-brown);
+  font-family: "Playfair Display", serif;
+  margin-bottom: 0.5rem;
+}
+
+.model-info p {
+  color: var(--charcoal);
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
